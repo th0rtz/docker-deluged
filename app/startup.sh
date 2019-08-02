@@ -1,10 +1,15 @@
-#!/bin/sh
-#
+#!/bin/bash
+set -euo pipefail
 
-set -e
+mkdir /app/logs
 
-if [ "$1" = 'startup' ]; then
-	/usr/bin/deluged --config=/app/ --pidfile=/deluged.pid --logfile=/app/deluged.log --loglevel=info
-	/usr/bin/deluge-web --config=/app/ --logfile=/app/deluge-web.log --loglevel=info
-	tail -f /app/deluged.log
-fi
+/usr/bin/deluged \
+	--config=/app/ \
+	--pidfile=/deluged.pid \
+	--logfile=/app/logs/deluged.log \
+	--loglevel=info
+/usr/bin/deluge-web \
+	--config=/app/ \
+	--logfile=/app/logs/deluge-web.log \
+	--loglevel=info
+tail -f /app/logs/deluged.log
